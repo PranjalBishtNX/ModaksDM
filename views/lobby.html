@@ -1,0 +1,125 @@
+<!DOCTYPE HTML>
+<html>
+
+    <head>
+        <title>DM App - Lobby</title>
+        <meta name="description" content="website description" />
+        <meta name="keywords" content="website keywords, website keywords" />
+        <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
+        <link rel="stylesheet" type="text/css" href="/views/style/style.css" />
+        <style>
+
+            form input { border: 0; padding: 10px; width: 91%; }
+            form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+            #messages { list-style-type: none; margin: 0; padding: 0; }
+            #messages li { padding: 5px 10px; }
+            #messages li:nth-child(odd) { background: #eee; }
+            #messages { margin-bottom: 40px }
+            #messages .conn_msg { color: #0d7;}
+        </style>
+    </head>
+
+    <body>
+        <div id="main">
+            <div id="header">
+                <div id="logo">
+                    <div id="logo_text">
+                        <!-- class="logo_colour", allows you to change the colour of the text -->
+                        <h1><a href="/">DM<span class="logo_colour">App</span></a></h1>
+                        <h2>Duel Masters Online.</h2>
+                    </div>
+                </div>
+                <div id="menubar">
+                    <ul id="menu">
+                        <!-- put class="selected" in the li tag for the selected page - to highlight which page you're on -->
+                        <li><a href="/">Home</a></li>               
+                        <li class="selected" ><a href="#">Lobby</a></li>
+                        <li><a href="/decks">Decks</a></li>    
+                        <li><a href="/stats">Stats</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div id="content_header"></div>
+            <div id="site_content">
+                <div class="sidebar">
+                    <!-- insert your sidebar items here -->
+                    <h3>Users online</h3>              
+                    <ul id="users"></ul>
+                </div>
+                <div id="content">
+                    <!-- insert the page content here -->
+                    <div id="message_box">
+                        <ul id="messages"></ul>
+                    </div>
+                    <form id="message_input_form" action="">
+                        <input id="message_input_box" autocomplete="off" />
+                        <button>Send</button>
+                    </form>
+                    <br />
+                    <a href ="/duel/" target ="_blank"> Duel Room </a>
+                    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+                    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+                    <script>
+
+                        var socket = io();
+                        var currentuser;
+
+                        // on connection to server, ask for user's name with an anonymous callback
+                        socket.on('connect', function () {
+                            // call the server-side function 'adduser' and send one parameter (value of prompt)
+                            socket.emit('adduser', prompt("If you have already entered a name in home page, ignore this. if not, please enter a Username"));
+                        });
+
+                        // listener, whenever the server emits 'updateusers', this updates the username list
+                        socket.on('updateusers', function (data) {
+                            $('#users').html("");
+                            for (x in data) {
+                                $('#users').append($('<li>').text(data[x]));
+                                window.scrollTo(0, document.body.scrollHeight);
+                            }
+                        });
+
+                        $(function () {
+
+                            //var socket = io();
+                            $('form').submit(function () {
+                                socket.emit('chat message', $('#message_input_box').val());
+                                $('#message_input_box').val('');
+                                return false;
+                            });
+                            socket.on('chat message', function (data) {
+                                if (data.msg != "")
+                                    $('#messages').append($('<li>').html("<b>" + data.user + ": </b>" + data.msg));
+                                //changed it so that it appears in a single line, now the alternating li color works - will need alignment later
+                                //crap, the messages are actually sent as html now so html tags in messages work...
+                                var box = document.getElementById("message_box");
+                                box.scrollTop = box.scrollHeight;
+                            });
+                            socket.on('connect message', function (args) {
+                                if (args == null)
+                                    $('#messages').append($("<li class='conn_msg'>").html("You are connected"));
+                                else
+                                $('#messages').append($("<li class='conn_msg'>").html(args + " has joined the chat"));
+                            });
+                            socket.on('disconn message', function (user) {                              
+                                $('#messages').append($("<li class='conn_msg'>").html(user + " has left the chat"));
+                            });
+                            
+                            socket.on('history message', function (msg) {
+                                $('#messages').append($("<li >").html(msg));
+                            });
+                        });
+
+
+                    </script>
+                </div>
+            </div>
+            <div id="content_footer"></div>
+            <div id="footer">
+                <p><a href="/">Home</a> <!-- | <a href="examples.html">Examples</a> | <a href="page.html">A Page</a> | <a href="another_page.html">Another Page</a> | <a href="contact.html">Contact Us</a>--></p>
+                <p>Copyright &copy; shadowplay_2 | <a href="http://validator.w3.org/check?uri=referer">HTML5</a> | <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> | <a href="http://www.html5webtemplates.co.uk">design from HTML5webtemplates.co.uk</a></p>
+            </div>
+        </div>
+    </body>
+</html>
