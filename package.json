@@ -1,18 +1,13 @@
 {
-  "name": "duelmasters",
+  "name": "DMApp",
   "version": "0.0.1",
-  "description": "wkwkwkwk wakanda forever",
-  "main": "server.js",
+  "description": "DM APP - DM Online",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "4.15.4",
+    "socket.io": "1.7.4"
+  },
   "scripts": {
     "start": "node server.js"
-  },
-  "author": "wololo",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.17.0",
-    "socket.io": "^2.2.0"
-  },
-   "engines": {
-    "node": "4.0.0"
   }
 }
