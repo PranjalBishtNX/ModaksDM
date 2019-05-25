@@ -10,7 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.0",
-    "git": "^0.1.5",
     "socket.io": "^2.2.0"
   },
    "engines": {
