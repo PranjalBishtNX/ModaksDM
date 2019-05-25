@@ -1,13 +1,19 @@
 {
-  "name": "DMApp",
-  "version": "0.0.1",
-  "description": "DM APP - DM Online",
+  "name": "project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
   "dependencies": {
-    "body-parser": "^1.17.2",
-    "express": "4.15.4",
-    "socket.io": "1.7.4"
+    "express": "^4.13.4",
+    "socket.io": "^1.4.5"
   },
+  "engines": {
+    "node": "4.1.x"
+  },
+  "devDependencies": {},
   "scripts": {
-    "start": "node server.js"
-  }
+	"start": "node app.js"
+  },
+  "author": "",
+  "license": "ISC"
 }
