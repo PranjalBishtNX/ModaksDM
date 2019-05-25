@@ -25,8 +25,8 @@ var players = {};
 io.on('connection', function(socket) {
   socket.on('new player', function() {
     players[socket.id] = {
-      x: 300,
-      y: 300
+      x: Math.random()*300,
+      y: Math.random()*300
     };
   });
   socket.on('movement', function(data) {
